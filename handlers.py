@@ -2,26 +2,47 @@ from aiogram import Router, Bot
 from aiogram.filters import Command, CommandObject
 from aiogram.types import Message
 from aiogram.types.input_file import FSInputFile
-from keyboards import keyboard_main_menu
+
 import config
+from ai_open import chat_gpt
+from ai_open.messages import GPTMessage
+from keyboards import keyboard_main_menu
 from utils import FileManager
 from utils.enum_path import PATH
+
 main_router = Router()
 
+
 # хендлер, который обрабатывает все команды и подставляет изображение
-@main_router.message(Command('start', "random","quiz","talk","gpt",))
+@main_router.message(Command('start', "quiz", "talk", "gpt", ))
 async def command_command(message: Message, command: CommandObject):
     keyboard = None
     if command.command == "start":
         keyboard = keyboard_main_menu()
     await message.answer_photo(
-        photo = FSInputFile(PATH.IMAGES.value.format(file = command.command)),
-        caption= FileManager.read_txt(PATH.MESSAGES,command.command),
+        photo=FSInputFile(PATH.IMAGES.value.format(file=command.command)),
+        caption=FileManager.read_txt(PATH.MESSAGES, command.command),
         reply_markup=keyboard,
     )
 
 
-#сообщает админу какой пользователь что написал
+# КОМАНДА РАНДОМ
+@main_router.message(Command("random"))
+async def random_handler(message: Message, command: CommandObject, bot: Bot):
+    await message.answer_photo(
+        photo=FSInputFile(PATH.IMAGES.value.format(file=command.command)),
+        caption=FileManager.read_txt(PATH.MESSAGES, command.command),
+    )
+
+    response = await chat_gpt.request(GPTMessage('random'), bot)
+    await bot.edit_message_text(
+        chat_id=message.from_user.id,
+        message_id=message.message_id,
+        text=response,
+    )
+
+
+# сообщает админу какой пользователь что написал
 @main_router.message()
 async def all_messages(message: Message, bot: Bot):
     msg_text = f"Пользователь {message.from_user.full_name} написал: \n {message.text}"
