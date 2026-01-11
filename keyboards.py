@@ -12,4 +12,7 @@ def keyboard_main_menu():
         keyboard.button(
             text=button,
         )
-    return keyboard.as_markup(resize_keyboard=True)
+    return keyboard.as_markup(
+        resize_keyboard=True,
+
+    )
