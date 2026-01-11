@@ -1,9 +1,10 @@
 import os
+from .enum_path import PATH
 
 
 class FileManager:
     @staticmethod
-    def read_txt(path:Path, file_name: str):
+    def read_txt(path:PATH, file_name: str):
         if not file_name.endswith(".txt"):
             file_name += ".txt"
         path = os.path.join(path.value, file_name)
