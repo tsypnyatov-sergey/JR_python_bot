@@ -42,4 +42,5 @@ class GPTService:
                 chat_id = config.ADMIN_ID,
                 text = str(e),
             )
+            return "Ошибка при обращении к GPT.Попробуйте позже"
 

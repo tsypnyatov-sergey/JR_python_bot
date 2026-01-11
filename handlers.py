@@ -5,7 +5,6 @@ from aiogram.types.input_file import FSInputFile
 
 import config
 from ai_open import chat_gpt
-from ai_open.messages import GPTMessage
 from keyboards import keyboard_main_menu
 from utils import FileManager
 from utils.enum_path import PATH
@@ -34,7 +33,7 @@ async def random_handler(message: Message, command: CommandObject, bot: Bot):
         caption=FileManager.read_txt(PATH.MESSAGES, command.command),
     )
 
-    response = await chat_gpt.request(GPTMessage('random'), bot)
+    response = await chat_gpt.request('random', bot)
     await bot.edit_message_text(
         chat_id=message.from_user.id,
         message_id=message.message_id,
