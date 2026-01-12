@@ -27,13 +27,13 @@ async def command_start(message: Message, command: CommandObject):
 # КОМАНДА РАНДОМ
 @main_router.message(Command("random"))
 async def random_handler(message: Message, command: CommandObject, bot: Bot):
-    await message.answer_photo(
+    sent_message = await message.answer_photo(                                      #правка sent_message от гпт
         photo=FSInputFile(PATH.IMAGES.value.format(file=command.command)),
         caption=FileManager.read_txt(PATH.MESSAGES, command.command),
     )
 
     await bot.send_chat_action(
-        chat_id = message.from_user.id,
+        chat_id = message.chat.id,
         action = ChatAction.TYPING,
     )
 
@@ -44,8 +44,8 @@ async def random_handler(message: Message, command: CommandObject, bot: Bot):
             caption=response,
 
         ),
-        chat_id=message.from_user.id,
-        message_id=message.message_id+1,
+        chat_id=sent_message.chat.id, #используем chat.id, вместо from_user_id
+        message_id=sent_message.message_id, #убрали +1
         reply_markup = ikb_random(),
 
     )
