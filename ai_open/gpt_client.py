@@ -3,8 +3,9 @@ import openai
 from aiogram import Bot
 
 import config
-from .enums import GPTModel
-from .messages import GPTMessage
+from ai_open.enums import GPTModel #гпт пишет что такой импорт лучше. До этого был from .enums
+from ai_open.messages import GPTMessage #гпт пишет что такой импорт лучше. До этого был from .messages
+
 
 
 class GPTService:
@@ -15,7 +16,7 @@ class GPTService:
             cls._instance =super().__new__(cls)
         return cls._instance
 
-    def __init__(self, model: GPTModel = GPTModel.GPT_4_TURBO):
+    def __init__(self, model: GPTModel = GPTModel.GPT_3_TURBO):
         self._gpt_token = config.OPENAI_API_KEY
         self._proxy = config.PROXY
         self._client = self._create_client()

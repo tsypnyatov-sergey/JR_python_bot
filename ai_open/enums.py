@@ -6,7 +6,7 @@ class GPTRole(Enum):
     SYSTEM = "system"
 
 class GPTModel(Enum):
-    GPT_3_TURBO = "gpt_3.5-turbo"
-    GPT_4_TURBO = "gpt_4-turbo"
+    GPT_3_TURBO = "gpt-3.5-turbo"
+    GPT_4_TURBO = "gpt-4"
     WHISPER ="whisper-1"  #обработка голосовых сообщений
     GPT_IMAGE = "dall-e-3" #обработка изображений
