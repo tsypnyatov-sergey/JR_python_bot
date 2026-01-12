@@ -1,4 +1,5 @@
-from aiogram.utils.keyboard import ReplyKeyboardBuilder
+from aiogram.types import InlineKeyboardMarkup
+from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 
 def keyboard_main_menu():
     keyboard = ReplyKeyboardBuilder()
@@ -16,3 +17,18 @@ def keyboard_main_menu():
         resize_keyboard=True,
 
     )
+
+def ikb_random():
+    keyboard = InlineKeyboardBuilder()
+    buttons = [
+        "Хочу еще факт!",
+        "Закончить",
+
+    ]
+
+    for button in buttons:
+        keyboard.button(
+            text=button,
+            callback_data="1",
+        )
+    return keyboard.as_markup()
