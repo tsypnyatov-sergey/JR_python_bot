@@ -7,7 +7,7 @@ from aiogram.enums.chat_action import ChatAction
 import config
 from ai_open import chat_gpt
 from ai_open.messages import GPTMessage
-from keyboards import keyboard_main_menu, ikb_random
+from keyboards import ikb_main_menu, ikb_random
 from utils import FileManager
 from utils.enum_path import PATH
 
@@ -15,15 +15,12 @@ main_router = Router()
 
 
 # хендлер, который обрабатывает все команды и подставляет изображение
-@main_router.message(Command('start', "quiz", "talk", "gpt", ))
-async def command_command(message: Message, command: CommandObject):
-    keyboard = None
-    if command.command == "start":
-        keyboard = keyboard_main_menu()
-    await message.answer_photo(
+@main_router.message(Command('start'))
+async def command_start(message: Message, command: CommandObject):
+        await message.answer_photo(
         photo=FSInputFile(PATH.IMAGES.value.format(file=command.command)),
         caption=FileManager.read_txt(PATH.MESSAGES, command.command),
-        reply_markup=keyboard,
+        reply_markup=ikb_main_menu(),
     )
 
 
