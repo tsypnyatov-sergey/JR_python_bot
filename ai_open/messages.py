@@ -18,3 +18,10 @@ class GPTMessage:
     def _load_prompt(self) -> str:
         prompt = FileManager.read_txt(PATH.PROMPTS,self._prompt_path)
         return prompt
+
+    def update(self, role: GPTRole, message: str):
+        message = {
+            "role": role.value,
+            "content": message,
+        }
+        self.message_list.append(message)

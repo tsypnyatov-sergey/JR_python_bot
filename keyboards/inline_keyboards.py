@@ -1,5 +1,7 @@
-from aiogram.utils.keyboard import  InlineKeyboardBuilder
 from collections import namedtuple
+
+from aiogram.utils.keyboard import InlineKeyboardBuilder
+
 from .callback_data import CallbackMenu
 
 Button = namedtuple("Button", ["text","callback"])
@@ -27,14 +29,30 @@ def ikb_main_menu():
 def ikb_random():
     keyboard = InlineKeyboardBuilder()
     buttons = [
-        "Хочу еще факт!",
-        "Закончить",
+        Button("Хочу еще факт!", "random"),
+        Button("Закончить", "start"),
 
     ]
 
     for button in buttons:
         keyboard.button(
-            text=button,
-            callback_data="1",
+            text=button.text,
+            callback_data=CallbackMenu(button = button.callback),
+        )
+    return keyboard.as_markup()
+
+
+def ikb_gpt_menu():
+    keyboard = InlineKeyboardBuilder()
+    buttons = [
+        Button("Хочу еще запрос!", "gpt"),
+        Button("Закончить", "start"),
+
+    ]
+
+    for button in buttons:
+        keyboard.button(
+            text=button.text,
+            callback_data=CallbackMenu(button = button.callback),
         )
     return keyboard.as_markup()
