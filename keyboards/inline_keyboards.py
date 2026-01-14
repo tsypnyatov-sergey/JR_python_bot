@@ -56,3 +56,12 @@ def ikb_gpt_menu():
             callback_data=CallbackMenu(button = button.callback),
         )
     return keyboard.as_markup()
+
+
+def ikb_cancel_gpt():
+    keyboard = InlineKeyboardBuilder()
+    keyboard.button(
+        text="Отмена",
+        callback_data=CallbackMenu(button = "start"),
+    )
+    return keyboard.as_markup()

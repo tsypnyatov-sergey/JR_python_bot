@@ -7,7 +7,7 @@ from .fsm import GPTRequest
 from aiogram.fsm.context import FSMContext
 from ai_open import chat_gpt
 from ai_open.messages import GPTMessage
-from keyboards import ikb_main_menu, ikb_random
+from keyboards import ikb_main_menu, ikb_random, ikb_cancel_gpt
 from keyboards.callback_data import CallbackMenu
 from utils import FileManager
 from utils.enum_path import PATH
@@ -15,7 +15,8 @@ from utils.enum_path import PATH
 inline_router = Router()
 
 @inline_router.callback_query(CallbackMenu.filter(F.button == "start"))
-async def main_menu(callback: CallbackQuery, callback_data: CallbackMenu, bot: Bot):
+async def main_menu(callback: CallbackQuery, callback_data: CallbackMenu, state: FSMContext, bot: Bot):
+    await state.clear()
     await bot.edit_message_media(
         media=InputMediaPhoto(
             media=FSInputFile(PATH.IMAGES.value.format(file=callback_data.button)),
@@ -70,7 +71,7 @@ async def gpt_menu(callback: CallbackQuery, callback_data: CallbackMenu,state: F
         ),
         chat_id=callback.from_user.id,
         message_id=callback.message.message_id,
-        #reply_markup = ikb_main_menu()
+        reply_markup = ikb_cancel_gpt()
     )
 
 
