@@ -2,7 +2,12 @@ from collections import namedtuple
 
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from .callback_data import CallbackMenu
+from .callback_data import CallbackMenu, CallbackTalk
+
+import os
+
+from utils.enum_path import PATH
+from utils import FileManager
 
 Button = namedtuple("Button", ["text","callback"])
 
@@ -63,5 +68,33 @@ def ikb_cancel_gpt():
     keyboard.button(
         text="Отмена",
         callback_data=CallbackMenu(button = "start"),
+    )
+    return keyboard.as_markup()
+
+
+def ikb_talk_menu():
+    keyboard = InlineKeyboardBuilder()
+    celebrity = [file.rsplit(".",1)[0] for file in os.listdir(PATH.IMAGES_DIR.value) if file.startswith("talk_")]
+    for item in celebrity:
+        text_button = FileManager.read_txt(PATH.PROMPTS, item).split(",",1)[0].split("-")[-1]
+        keyboard.button(
+            text=text_button,
+            callback_data=CallbackTalk(
+                button = 'talk',
+                celebrity = item,
+            )
+        )
+    keyboard.button(
+        text = "В главное меню",
+        callback_data=CallbackMenu(button = "start")
+    )
+    keyboard.adjust(1)
+    return keyboard.as_markup()
+
+def ikb_talk_back():
+    keyboard = InlineKeyboardBuilder()
+    keyboard.button(
+        text = "Закончить",
+        callback_data = CallbackMenu(button = "talk"),
     )
     return keyboard.as_markup()

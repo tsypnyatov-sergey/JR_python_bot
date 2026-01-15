@@ -3,14 +3,16 @@ from aiogram.enums.chat_action import ChatAction
 from aiogram.types import CallbackQuery, InputMediaPhoto
 from aiogram.types.input_file import FSInputFile
 
-from .fsm import GPTRequest
+from .fsm import GPTRequest, CelebrityTalk
 from aiogram.fsm.context import FSMContext
 from ai_open import chat_gpt
 from ai_open.messages import GPTMessage
-from keyboards import ikb_main_menu, ikb_random, ikb_cancel_gpt
-from keyboards.callback_data import CallbackMenu
+from keyboards import ikb_main_menu, ikb_random, ikb_cancel_gpt, ikb_talk_menu, ikb_talk_back
+from keyboards.callback_data import CallbackMenu,CallbackTalk
 from utils import FileManager
 from utils.enum_path import PATH
+
+from ai_open.enums import GPTRole
 
 inline_router = Router()
 
@@ -75,3 +77,34 @@ async def gpt_menu(callback: CallbackQuery, callback_data: CallbackMenu,state: F
     )
 
 
+@inline_router.callback_query(CallbackMenu.filter(F.button == "talk"))
+async def talk_menu(callback: CallbackQuery, callback_data: CallbackMenu,state: FSMContext, bot: Bot):
+    await state.clear()
+
+    await bot.edit_message_media(
+        media=InputMediaPhoto(
+            media=FSInputFile(PATH.IMAGES.value.format(file=callback_data.button)),
+            caption=FileManager.read_txt(PATH.MESSAGES, callback_data.button),
+        ),
+        chat_id=callback.from_user.id,
+        message_id=callback.message.message_id,
+        reply_markup = ikb_talk_menu()
+    )
+
+@inline_router.callback_query(CallbackTalk.filter(F.button == "talk"))
+async def talk_with_celebrity(callback: CallbackQuery, callback_data: CallbackMenu,state: FSMContext, bot: Bot):
+    await state.set_state(CelebrityTalk.dialog)
+    message_list = GPTMessage(callback_data.celebrity)
+    response = await chat_gpt.request(message_list, bot)
+    message_list.update(GPTRole.CHAT, response)
+    await state.update_data(messages = message_list, celebrity = callback_data.celebrity )
+
+    await bot.edit_message_media(
+        media=InputMediaPhoto(
+            media=FSInputFile(PATH.IMAGES.value.format(file=callback_data.celebrity)),
+            caption=response,
+        ),
+        chat_id=callback.from_user.id,
+        message_id=callback.message.message_id,
+        reply_markup = ikb_talk_back(),
+    )

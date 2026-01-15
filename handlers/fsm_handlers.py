@@ -3,22 +3,22 @@ from aiogram.enums.chat_action import ChatAction
 from aiogram.types import Message, InputMediaPhoto
 from aiogram.types.input_file import FSInputFile
 
-
-from .fsm import GPTRequest
+from .fsm import GPTRequest, CelebrityTalk
 from aiogram.fsm.context import FSMContext
 from ai_open import chat_gpt
 from ai_open.messages import GPTMessage
-from keyboards import ikb_main_menu, ikb_random, ikb_gpt_menu
+from keyboards import ikb_main_menu, ikb_random, ikb_gpt_menu, ikb_talk_back
 from keyboards.callback_data import CallbackMenu
 from utils import FileManager
 from utils.enum_path import PATH
 from ai_open.enums import GPTRole
 
-fsm_router=Router()
+fsm_router = Router()
+
 
 @fsm_router.message(GPTRequest.wait_for_request)
 async def wait_for_user_request(message: Message, state: FSMContext, bot: Bot):
-    msg_list =GPTMessage("gpt")
+    msg_list = GPTMessage("gpt")
     msg_list.update(GPTRole.USER, message.text)
     response = await chat_gpt.request(msg_list, bot)
     await bot.delete_message(
@@ -33,7 +33,21 @@ async def wait_for_user_request(message: Message, state: FSMContext, bot: Bot):
         ),
         chat_id=message.from_user.id,
         message_id=message_id,
-        reply_markup = ikb_gpt_menu()
+        reply_markup=ikb_gpt_menu()
     )
 
 
+@fsm_router.message(CelebrityTalk.dialog)
+async def user_dialog_with_celebrity(message: Message, state: FSMContext, bot: Bot):
+    message_list = await state.get_value('messages')
+    celebrity = await state.get_value('celebrity')
+    message_list.update(GPTRole.USER, message.text)
+    response = await chat_gpt.request(message_list, bot)
+    message_list.update(GPTRole.USER, response)
+
+    await bot.send_photo(
+        chat_id=message.from_user.id,
+        photo=FSInputFile(PATH.IMAGES.value.format(file=celebrity)),
+        caption=response,
+        reply_markup=ikb_talk_back(),
+    )
