@@ -6,3 +6,6 @@ class GPTRequest(StatesGroup):
 
 class CelebrityTalk(StatesGroup):
     dialog = State()
+
+class Quiz(StatesGroup):
+    game = State()

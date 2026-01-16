@@ -2,7 +2,7 @@ from collections import namedtuple
 
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from .callback_data import CallbackMenu, CallbackTalk
+from .callback_data import CallbackMenu, CallbackTalk, CallbackQuiz
 
 import os
 
@@ -97,4 +97,63 @@ def ikb_talk_back():
         text = "Закончить",
         callback_data = CallbackMenu(button = "talk"),
     )
+    return keyboard.as_markup()
+
+def ikb_quiz_menu():
+    keyboard = InlineKeyboardBuilder()
+    buttons = [
+        Button("Программирование", 'quiz_prog'),
+        Button("Математика",'quiz_math'),
+        Button("Биология",'quiz_biology'),
+    ]
+    for button in buttons:
+        keyboard.button(
+            text = button.text,
+            callback_data = CallbackQuiz(
+                button = "quiz",
+                subject = button.callback,
+            )
+        )
+
+    keyboard.button(
+        text="В главное меню",
+        callback_data=CallbackMenu(button="start")
+    )
+    keyboard.adjust(1)
+    return keyboard.as_markup()
+
+def ikb_quiz_back():
+    keyboard = InlineKeyboardBuilder()
+    keyboard.button(
+        text = "Закончить",
+        callback_data = CallbackMenu(button = "start"),
+    )
+
+    return keyboard.as_markup()
+
+
+def ikb_quiz_navigation():
+    keyboard = InlineKeyboardBuilder()
+    keyboard.button(
+        text="Еще вопрос",
+        callback_data=CallbackQuiz(
+            button="quiz",
+            subject = "quiz_more",
+
+        ),
+    )
+
+    keyboard.button(
+        text="Сменить тему",
+        callback_data=CallbackMenu(button="quiz"),
+    )
+
+    keyboard.button(
+        text="В главное меню",
+        callback_data=CallbackMenu(button="start"),
+    )
+    keyboard.adjust(1)
+    return keyboard.as_markup()
+
+    keyboard.adjust(1)
     return keyboard.as_markup()

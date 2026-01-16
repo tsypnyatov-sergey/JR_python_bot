@@ -6,3 +6,8 @@ class CallbackMenu(CallbackData, prefix = "CM"):
 class CallbackTalk(CallbackData, prefix = "CT"):
     button: str
     celebrity: str
+
+
+class CallbackQuiz(CallbackData, prefix = "CQ"):
+    button: str
+    subject: str
