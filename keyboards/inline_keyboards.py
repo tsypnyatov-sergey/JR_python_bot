@@ -155,5 +155,3 @@ def ikb_quiz_navigation():
     keyboard.adjust(1)
     return keyboard.as_markup()
 
-    keyboard.adjust(1)
-    return keyboard.as_markup()
