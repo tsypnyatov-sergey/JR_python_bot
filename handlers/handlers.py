@@ -11,11 +11,11 @@ from keyboards import ikb_main_menu, ikb_random
 from utils import FileManager
 from utils.enum_path import PATH
 
-main_router = Router()
+command_router = Router()
 
 
 # хендлер, который обрабатывает все команды и подставляет изображение
-@main_router.message(Command('start'))
+@command_router.message(Command('start'))
 async def command_start(message: Message, command: CommandObject):
         await message.answer_photo(
         photo=FSInputFile(PATH.IMAGES.value.format(file=command.command)),
@@ -24,35 +24,9 @@ async def command_start(message: Message, command: CommandObject):
     )
 
 
-# КОМАНДА РАНДОМ
-@main_router.message(Command("random"))
-async def random_handler(message: Message, command: CommandObject, bot: Bot):
-    await message.answer_photo(
-        photo=FSInputFile(PATH.IMAGES.value.format(file=command.command)),
-        caption=FileManager.read_txt(PATH.MESSAGES, command.command),
-    )
-
-    await bot.send_chat_action(
-        chat_id = message.from_user.id,
-        action = ChatAction.TYPING,
-    )
-
-    response = await chat_gpt.request(GPTMessage('random'), bot)
-    await bot.edit_message_media(
-        media=InputMediaPhoto(
-            media=FSInputFile(PATH.IMAGES.value.format(file=command.command)),
-            caption=response,
-
-        ),
-        chat_id=message.from_user.id,
-        message_id=message.message_id+1,
-        reply_markup = ikb_random(),
-
-    )
-
 
 # сообщает админу какой пользователь что написал
-@main_router.message()
+@command_router.message()
 async def all_messages(message: Message, bot: Bot):
     msg_text = f"Пользователь {message.from_user.full_name} написал: \n {message.text}"
     await bot.send_message(
