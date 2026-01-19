@@ -103,7 +103,7 @@ def ikb_quiz_menu():
     keyboard = InlineKeyboardBuilder()
     buttons = [
         Button("Программирование", 'quiz_prog'),
-        Button("Математика",'quiz_math'),
+        Button("Английский язык",'quiz_english'),
         Button("Биология",'quiz_biology'),
     ]
     for button in buttons:
@@ -155,5 +155,3 @@ def ikb_quiz_navigation():
     keyboard.adjust(1)
     return keyboard.as_markup()
 
-    keyboard.adjust(1)
-    return keyboard.as_markup()
