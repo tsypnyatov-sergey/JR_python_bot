@@ -66,7 +66,7 @@ async def user_answer(message: Message, state: FSMContext, bot: Bot):
     if response == "Правильно!":
         score +=1
         await state.update_data(score=score)
-    response += f"\n\n Ваш счет: {score} баллов!" # попробовать дописать что счет был до 10 баллов. если 10 набрали - победа
+    response += f"\n\n Ваш счет: {score} баллов!" # дописать что счет был до 10 баллов. если 10 набрали - победа
     await bot.delete_message(
         chat_id = message.from_user.id,
         message_id = message.message_id,

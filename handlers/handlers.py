@@ -25,7 +25,7 @@ async def command_start(message: Message, command: CommandObject):
 
 
 
-# сообщает админу какой пользователь что написал
+# Пересылает админу сообщения, которые не перехватили другие функции.
 @command_router.message()
 async def all_messages(message: Message, bot: Bot):
     msg_text = f"Пользователь {message.from_user.full_name} написал: \n {message.text}"

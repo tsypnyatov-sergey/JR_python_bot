@@ -24,7 +24,7 @@ async def main_menu(callback: CallbackQuery, callback_data: CallbackMenu, state:
             media=FSInputFile(PATH.IMAGES.value.format(file=callback_data.button)),
             caption=FileManager.read_txt(PATH.MESSAGES, callback_data.button),
         ),
-        chat_id=callback.from_user.id,  # используем chat.id, вместо from_user_id
+        chat_id=callback.from_user.id,
         message_id=callback.message.message_id,
         reply_markup = ikb_main_menu()
     )
@@ -37,7 +37,7 @@ async def random_handler(callback: CallbackQuery, callback_data: CallbackMenu, b
             media=FSInputFile(PATH.IMAGES.value.format(file=callback_data.button)),
             caption=FileManager.read_txt(PATH.MESSAGES, callback_data.button),
         ),
-        chat_id=callback.from_user.id,  # используем chat.id, вместо from_user_id
+        chat_id=callback.from_user.id,
         message_id=callback.message.message_id,
     )
 
@@ -53,7 +53,7 @@ async def random_handler(callback: CallbackQuery, callback_data: CallbackMenu, b
             caption=response,
 
         ),
-        chat_id=callback.from_user.id, #используем chat.id, вместо from_user_id
+        chat_id=callback.from_user.id,
         message_id=callback.message.message_id,
         reply_markup = ikb_random(),
 
