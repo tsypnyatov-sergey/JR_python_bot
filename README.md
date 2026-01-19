@@ -41,7 +41,6 @@ ADMIN_ID=
 OPENAI_API_KEY=
 PROXY=
 
-
 ## Рекомендации по Git
 Добавьте в .gitignore:
 venv/
