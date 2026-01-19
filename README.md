@@ -41,14 +41,5 @@ ADMIN_ID=
 OPENAI_API_KEY=
 PROXY=
 
-## Рекомендации по Git
-
-Добавьте в `.gitignore` следующие строки:
-
-```gitignore
-venv/
-.env
-__pycache__/
-.idea/
 
 
